@@ -1,4 +1,5 @@
-## Example usage
+# Examples
+## ValidationForm
 ```tsx
 <ValidationForm
     values={{
@@ -17,6 +18,7 @@
             b: composeHandler(
                 requireValue("b must have an answer"),
                 requireMinimumLength(3)
+                requirePattern(/^\w+$/i)
             )
         }
     }}
@@ -24,11 +26,16 @@
     component={({ submit, validate, values: { name, age }, results }) =>
         <>
             <ValidationSummary value={results} />
-            <p>{name}, {age}</p>
+            <input value={name} type="text">
+            <input value={age} type="number">
+
             <button type="button" onClick={submit}>Validate</button>
         </>}
-/>
+    />
+```
 
+## ValidationHandlers<T>
+```typescript
 interface Address {
     line1: string;
     postcode: string;
