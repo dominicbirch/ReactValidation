@@ -8,10 +8,14 @@
         "blah": {
             a: 1,
             b: "2"
+        },
+        "address":{
+            line1:"",
+            postcode: ""
         }
     }}
     rules={{
-        name: n => n ? null : ["Please provide a name"],
+        name: requireValue("Please provide a name"),
         age: requireMinimum(18),
         blah: {
             a: requireMinimum(1),
@@ -20,7 +24,8 @@
                 requireMinimumLength(3)
                 requirePattern(/^\w+$/i)
             )
-        }
+        },
+        address: ValidateAddress
     }}
     action={valid => alert(valid)}
     component={({ submit, validate, values: { name, age }, results }) =>
@@ -42,7 +47,10 @@ interface Address {
 }
 
 export const ValidateAddress: ValidationHandlers<Address> = {
-    line1: x => null,
-    postcode: p => null
+    line1: x => requireValue(),
+    postcode: p => composeHandler(
+        requireValue("The postcode field is required")
+        ...
+    )
 };
 ```
