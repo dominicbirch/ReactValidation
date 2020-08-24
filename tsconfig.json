@@ -1,0 +1,24 @@
+{
+    "include": [
+        "./src/**/*.*"
+    ],
+    "compileOnSave": true,
+    "compilerOptions": {
+        "lib": [
+            "DOM",
+            "ES5",
+            "ES6",
+            "ES2015"
+        ],
+        "baseUrl": "./src/",
+        "rootDir": "./src/",
+        "outDir": "./lib/",
+        "target": "es5",
+        "jsx": "react",
+        "declaration": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "moduleResolution": "Node"
+    }
+}
