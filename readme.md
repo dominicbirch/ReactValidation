@@ -47,8 +47,8 @@ interface Address {
 }
 
 export const ValidateAddress: ValidationHandlers<Address> = {
-    line1: x => requireValue(),
-    postcode: p => composeHandler(
+    line1: requireValue(),
+    postcode: composeHandler(
         requireValue("The postcode field is required")
         ...
     )
