@@ -29,15 +29,16 @@ export function ValidationSummary<T = any>({ value, className, style }: Validati
                     }
                     {
                         value.each &&
-                        value.each.map((r, i) =>
-                            anyFailures(r)
+                        Object.keys(value.each).map((k, i) => {
+                            const r = value.each && value.each[k];
+                            return anyFailures(r)
                                 ?
                                 <li key={i}>
-                                    {/*TODO: Label */}
-                                    {`Item ${i + 1}`}
+                                    {k}
                                     <ValidationSummary value={r} />
                                 </li>
-                                : null)
+                                : null;
+                        })
                     }
                 </ul>
             );
