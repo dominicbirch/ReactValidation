@@ -53,7 +53,7 @@ export default () =>
             }
         }}
         rules={{
-            testArray1: new ArrayValidator<string>(requireValue(), composeHandler<string>(requireValue(), requireMinimumLength(2)), i => `String ${i}`),
+            testArray1: new ArrayValidator(requireValue(), composeHandler<string>(requireValue(), requireMinimumLength(2)), i => `String ${i}`),
             testArray2: requireValue(),
             testArray3: new ArrayValidator(requireValue(), requireValue()),
             testNested: {
