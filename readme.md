@@ -1,5 +1,6 @@
 # Examples
 ## ValidationForm
+### Example 1
 ```tsx
 <ValidationForm
     values={{
@@ -37,6 +38,34 @@
             <button type="button" onClick={submit}>Validate</button>
         </>}
     />
+```
+### Example 2
+```tsx
+export default () =>
+    <ValidationForm
+        values={{
+            testArray1: ["One", "Two", "Three"],
+            testArray2: [{ test: 1 }, { test: 2 }, { test: 3 }],
+            testArray3: [[1, "One"], [2, "Two"], [3, "Three"]],
+            testNested: {
+                1: "Test 1",
+                2: "Test 2"
+            }
+        }}
+        rules={{
+            testArray1: new ArrayValidator<string>(requireValue(), composeHandler<string>(requireValue(), requireMinimumLength(2)), i => `String ${i}`),
+            testArray2: requireValue(),
+            testArray3: new ArrayValidator(requireValue(), requireValue()),
+            testNested: {
+                1: requireValue(),
+                2: requireValue()
+            }
+        }}
+        component={({ submit, results }) =>
+            <form onSubmit={submit} method="none">
+                <ValidationSummary value={results} />
+                <button type="submit">Test</button>
+            </form>} />
 ```
 
 ## ValidationHandlers<T>
