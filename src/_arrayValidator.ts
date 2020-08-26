@@ -1,8 +1,8 @@
-import { AnyResult, ValidationHandler, Validator } from "_common";
-import { applyValildationRules, isArrayValidator, isValidationRules } from "_utils";
+import { AnyResult, ValidationHandler, Validator } from "./_common";
+import { applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
 export class ArrayResult<T = any> {
-    constructor(public readonly all: null | string[], public readonly each?: AnyResult<T>[]) {
+    constructor(readonly all: null | string[], readonly each?: AnyResult<T>[]) {
     }
 
     public isValid(): boolean {

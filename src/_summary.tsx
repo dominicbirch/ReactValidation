@@ -1,6 +1,6 @@
 import React = require("react");
-import { AnyResult } from "_common";
-import { anyFailures, isArrayResult } from "_utils";
+import { AnyResult } from "./_common";
+import { anyFailures, isArrayResult } from "./_utils";
 
 
 export interface ValidationSummaryProps<T = any> {
