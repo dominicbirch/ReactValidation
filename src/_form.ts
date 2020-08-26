@@ -1,13 +1,10 @@
 import { createElement, useState, useMemo, useCallback } from "react";
 import ValidationContext from "./_context";
-
-export type ValidationResult = string[] | null | undefined;
-export type ValidationHandler<T = any> = (value: T) => ValidationResult;
-export type ValidationHandlers<T = any> = { [P in keyof T]?: ValidationHandlers<T[P]> | ValidationHandler<T[P]> };
-export type ValidationResults<T = any> = { [P in keyof T]?: ValidationResults<T[P]> | ValidationResult; };
+import { ValidationResult, ValidationRules, AnyResult } from "_common";
+import { anyFailures, isArrayValidator, isValidationRules, applyValildationRules } from "_utils";
 
 export interface SubjectProps<T = any, K extends keyof T = any> {
-    results: ValidationResults<T>;
+    results: ValidationResult<T>;
     values: T;
     submit: () => void;
     validate: (key?: K) => boolean;
@@ -15,71 +12,53 @@ export interface SubjectProps<T = any, K extends keyof T = any> {
 
 export interface ValidationFormProps<T, K extends keyof T> {
     values: T;
-    rules: ValidationHandlers<T>;
+    rules?: ValidationRules<T>;
     action?: (valid: boolean) => void;
     provideContext?: boolean;
     component: React.ComponentType<SubjectProps<T, K>>;
 }
 
-function isSingleRule<T>(subject?: ValidationHandler<T> | ValidationHandlers<T>): subject is ValidationHandler<T> {
-    return !!(typeof subject === "function");
-}
-function isMultiRule<T>(subject?: ValidationHandler<T> | ValidationHandlers<T>): subject is ValidationHandlers<T> {
-    return !!(subject && Object.keys(subject));
-}
-
-function validateKey<T, K extends keyof T>(key: K, rules: ValidationHandlers<T>, values: T): ValidationResult | ValidationResults<T[K]> {
+function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, values: T): AnyResult<T[K]> {
     const rule = rules[key];
 
-    if (isSingleRule(rule)) {
-        return rule(values[key]);
-    }
-    if (isMultiRule(rule)) {
-        return Object
-            .keys(rule)
-            .reduce((x, k, i) => {
-                x[k as keyof T[K]] = validateKey(k as keyof T[K], rule, values[key]);
-                return x;
-            }, {} as ValidationResults<T[K]>);
+    if (rule) {
+        if (typeof rule === "function") {
+            return rule(values[key]);
+        }
+
+        const value = values[key];
+        if (isArrayValidator<T[K]>(rule) && Array.isArray(value)) {
+            return rule.validate(value);
+        }
+        if (isValidationRules<T[K]>(rule)) {
+            return applyValildationRules(rule, value);
+        }
     }
 
     return null;
 }
 
-function anyFailures<T>(results: ValidationResults<T> | ValidationResult): boolean {
-    if (!results) { return false; }
-
-    return Array.isArray(results)
-        ? !!results.length
-        : Object.keys(results).some(k => anyFailures(results[k as keyof T]))
-}
-
 
 export function ValidationForm<T, K extends keyof T>({ values, rules, action, provideContext, component: Subject }: ValidationFormProps<T, K>) {
     const
-        [results, setResults] = useState({} as ValidationResults<T>),
+        [results, setResults] = useState({} as ValidationResult<T>),
         validate = useCallback((key?: K): boolean => {
-            if (key) {
-                let r = validateKey(key, rules, values);
-                setResults({ ...results, [key]: r });
+            if (rules) {
+                if (key) {
+                    let r = validateKey(key, rules, values);
+                    setResults({ ...results, [key]: r });
 
-                return !anyFailures(r);
+                    return !anyFailures(r);
+                }
+
+                const updatedResults = applyValildationRules(rules, values);
+                setResults(updatedResults);
+
+                return !anyFailures(updatedResults);
             }
 
-            setResults({});
-            if (!rules) { return true; }
-
-            const updatedResults = Object
-                .keys(rules)
-                .reduce((r, k, i) => {
-                    r[k as K] = validateKey(k as K, rules, values);
-                    return r;
-                }, {} as ValidationResults<T>);
-
-            setResults(updatedResults);
-
-            return !anyFailures(updatedResults);
-        }, [rules, values, setResults]),
+            return true;
+        }, [rules, values]),
         submit = useCallback(() => {
             const valid = validate();
             if (action) {

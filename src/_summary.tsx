@@ -1,55 +1,68 @@
-import { ValidationResults } from "./_form";
-import { useValidation } from "./_hooks";
 import React = require("react");
+import { AnyResult } from "_common";
+import { anyFailures, isArrayResult } from "_utils";
 
-export type ValidationSummaryProps<T = any> = {
-    value?: ValidationResults<T>;
+
+export interface ValidationSummaryProps<T = any> {
+    value?: AnyResult<T>;
+    className?: string;
+    style?: React.CSSProperties;
 }
 
-function isObject(subject: any): subject is Object {
-    return typeof subject === "object" && subject;
-}
+export function ValidationSummary<T = any>({ value, className, style }: ValidationSummaryProps<T>) {
+    const listProps = React.useMemo(() => ({ style, className: `validation-summary${className ? ` ${className}` : ""}` }), [className, style]);
 
-function renderResult<T extends ValidationResults, K extends keyof T>(key: K, value: T[K]) {
-    if (Array.isArray(value)) {
-        return (
-            <li key={String(key)}>
-                {key}
-                <ul>
+    if (anyFailures(value)) {
+        if (Array.isArray(value)) {
+            return (
+                <ul {...listProps}>
                     {value.map((m, i) => <li key={i}>{m}</li>)}
                 </ul>
-            </li>);
-    }
-    if (isObject(value)) {
-        return (
-            <li key={String(key)}>
-                {key}
-                <ul>
-                    {Object.keys(value).map(k => renderResult(k, value[k]))}
+            );
+        }
+        if (isArrayResult(value)) {
+            return (
+                <ul {...listProps}>
+                    {
+                        anyFailures(value.all) &&
+                        value.all?.map((m, i) => <li key={-i}>{m}</li>)
+                    }
+                    {
+                        value.each &&
+                        value.each.map((r, i) =>
+                            anyFailures(r)
+                                ?
+                                <li key={i}>
+                                    {/*TODO: Label */}
+                                    {`Item ${i + 1}`}
+                                    <ValidationSummary value={r} />
+                                </li>
+                                : null)
+                    }
                 </ul>
-            </li>
-        );
+            );
+        }
+        if (typeof value === "object" && anyFailures(value)) {
+            return (
+                <ul {...listProps}>
+                    {
+                        value &&
+                        Object.keys(value).map((k, i) => {
+                            const r = value[k as keyof typeof value];
+
+                            return anyFailures(r)
+                                ?
+                                <li key={i}>
+                                    {k}
+                                    <ValidationSummary value={r} />
+                                </li>
+                                : null;
+                        })
+                    }
+                </ul>
+            );
+        }
     }
 
     return <></>;
-}
-
-export function ValidationSummary<T = any>({ value }: ValidationSummaryProps<T>) {
-    return (
-        <ul className="validation-summary">
-            {
-                !!value
-                    ? Object
-                        .keys(value)
-                        .map(k => renderResult(k as keyof T, value[k as keyof T]))
-                    : function () {
-                        const { results } = useValidation<T>();
-
-                        return Object
-                            .keys(results)
-                            .map(k => renderResult(k as keyof T, results[k as keyof T]));
-                    }()
-            }
-        </ul>
-    );
 }
