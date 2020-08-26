@@ -1,7 +1,7 @@
-import { createElement, useState, useMemo, useCallback } from "react";
+import { createElement, useCallback, useMemo, useState } from "react";
+import { AnyResult, ValidationResult, ValidationRules } from "./_common";
 import ValidationContext from "./_context";
-import { ValidationResult, ValidationRules, AnyResult } from "./_common";
-import { anyFailures, isArrayValidator, isValidationRules, applyValildationRules } from "./_utils";
+import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
 export interface SubjectProps<T = any, K extends keyof T = any> {
     results: ValidationResult<T>;

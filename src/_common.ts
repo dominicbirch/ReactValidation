@@ -1,6 +1,5 @@
 import { ArrayResult, ArrayValidator } from "_arrayValidator";
 
-export type ReadOnly<T> = { readonly [P in keyof T]: ReadOnly<T[P]>; };
 export type ElementType<T> = T extends (infer U)[] ? U : never;
 
 export type ValidationResult<T = any> = {
