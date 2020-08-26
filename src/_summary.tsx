@@ -1,5 +1,5 @@
 import React = require("react");
-import { AnyResult } from "./_common";
+import { ValidationResult, AnyResult } from "./_common";
 import { anyFailures, isArrayResult } from "./_utils";
 
 

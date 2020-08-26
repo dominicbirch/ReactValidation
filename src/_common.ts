@@ -3,7 +3,7 @@ import { ArrayResult, ArrayValidator } from "_arrayValidator";
 export type ReadOnly<T> = { readonly [P in keyof T]: ReadOnly<T[P]>; };
 export type ElementType<T> = T extends (infer U)[] ? U : never;
 
-export type ValidationResult<T = any> = null | string[] | {
+export type ValidationResult<T = any> = {
     [P in keyof T]?: null | string[] | (T[P] extends any[] ? ArrayResult<ElementType<T[P]>> : T[P] extends Object ? ValidationResult<T[P]> : never);
 };
 export type ValidationHandler<T = any> = (value: T) => string[] | null;
