@@ -1,5 +1,5 @@
 import { ArrayResult, ArrayValidator } from "./_arrayValidator";
-import { AnyResult, AnyValidator, ElementType, ValidationHandler, ValidationResult, ValidationRules } from "./_common";
+import { AnyResult, AnyValidator, ElementType, Predicate, ValidationHandler, ValidationResult, ValidationRules } from "./_common";
 
 
 export function isValidationRules<T>(subject?: AnyValidator<T>): subject is ValidationRules<T> {
@@ -125,6 +125,12 @@ export function requireLengthBetween(min: number, max: number, message?: string)
 
 export function requirePattern(pattern: RegExp, message = "The answer provided is invalid"): ValidationHandler<string> {
     return v => pattern.test(v || "")
+        ? null
+        : [message];
+}
+
+export function requirePredicate<T = any>(predicate: Predicate<T>, message = "The answer provided is invalid"): ValidationHandler<T> {
+    return v => predicate(v)
         ? null
         : [message];
 }

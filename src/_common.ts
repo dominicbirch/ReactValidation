@@ -14,6 +14,8 @@ export type ValidationRules<T = any> = {
 export type AnyValidator<T> = ValidationHandler<T> | ValidationRules<T> | ArrayValidator<ElementType<T>>;
 export type AnyResult<T> = null | string[] | ArrayResult<ElementType<T>> | ValidationResult<T>;
 
+export type Predicate<T> = (value: T) => boolean;
+
 export interface Builder<T> {
     build(): T;
 }
