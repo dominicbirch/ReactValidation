@@ -53,9 +53,24 @@ export default () =>
             }
         }}
         rules={{
-            testArray1: new ArrayValidator(requireValue(), composeHandler<string>(requireValue(), requireMinimumLength(2)), i => `String ${i}`),
-            testArray2: requireValue(),
-            testArray3: new ArrayValidator(requireValue(), requireValue()),
+            testArray1: new ArrayValidatorBuilder<string>()
+                .withLabelFormat((i, v) => v)
+                .withRules(requireMinimumLength(2))
+                .withRulesForEach(requireValue(), requireMinimumLength(3))
+                .build(),
+            testArray2: new ArrayValidatorBuilder<{ test?: number }>()
+                .withLabelFormat((i, v) => `Item ${i + 1}: Test ${v.test}`)
+                .withRules(requireValue(), requireMinimumLength(1))
+                .withRuleForEach({
+                    test: requireValue()
+                })
+                .build(),
+            testArray3: new ArrayValidatorBuilder<React.ReactText[]>()
+                .withRules(requireValue())
+                .withRuleForEach(new ArrayValidatorBuilder<React.ReactText>()
+                    .withRules(x => x.length !== 2 ? ["There should be exactly 2 items"] : null)
+                    .build())
+                .build(),
             testNested: {
                 1: requireValue(),
                 2: requireValue()
@@ -65,7 +80,7 @@ export default () =>
             <form onSubmit={submit} method="none">
                 <ValidationSummary value={results} />
                 <button type="submit">Test</button>
-            </form>} />
+            </form>} />;
 ```
 
 ## ValidationHandlers<T>

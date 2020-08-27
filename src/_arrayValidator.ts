@@ -1,7 +1,8 @@
 import { AnyResult, ValidationHandler, Validator, ValidationResult } from "./_common";
 import { applyValildationRules, isArrayValidator, isValidationRules, anyFailures } from "./_utils";
 
-type ResultsDictionary<T = any> = { [key: string]: ValidationResult<T>; };
+export type ResultsDictionary<T = any> = { [key: string]: ValidationResult<T>; };
+export type ElementKeyFactory<T> = (index: number, element: T) => string;
 
 export class ArrayResult<T = any> {
     constructor(readonly all: null | string[], readonly each?: ResultsDictionary<T>) {
@@ -29,7 +30,7 @@ function applyRule<T>(validator: Validator<T>, value: T): AnyResult<T> {
 }
 
 export class ArrayValidator<T = any>{
-    constructor(readonly all: ValidationHandler<T[]> = () => null, readonly each: Validator<T> = () => null, readonly formatKey = (i: number) => `Item ${i + 1}`) {
+    constructor(readonly all: ValidationHandler<T[]> = () => null, readonly each: Validator<T> = () => null, readonly formatKey: ElementKeyFactory<T> = i => String(i)) {
     }
 
     public validate(values: T[]) {
@@ -54,9 +55,9 @@ export class ArrayValidator<T = any>{
             .filter(r => !!r);
 
         return each?.length
-            ? new ArrayResult<T>(all, values.reduce((r, k, i) => ({
+            ? new ArrayResult<T>(all, values.reduce((r, value, i) => ({
                 ...r,
-                [this.formatKey(i)]: applyRule(this.each, values[k as any])
+                [this.formatKey(i, value)]: applyRule(this.each, value)
             }), {}))
             : new ArrayResult<T>(all);
     }
