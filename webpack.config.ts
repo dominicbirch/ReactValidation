@@ -1,10 +1,11 @@
 import * as webpack from "webpack";
 import { resolve, join } from "path";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import CombineDefinitionsWebpackPlugin from "./combineDefinitionsWebpackPlugin";
 
 const
     { name: packageName } = require("./package.json"),
-    outDir = resolve("./lib") ;
+    outDir = resolve("./lib");
 
 export default <webpack.Configuration>{
     target: "node",
@@ -15,7 +16,7 @@ export default <webpack.Configuration>{
         path: outDir,
         publicPath: "/",
         library: packageName,
-        libraryTarget: "umd", 
+        libraryTarget: "umd",
         umdNamedDefine: true
     },
     resolve: {
@@ -37,6 +38,7 @@ export default <webpack.Configuration>{
             }
         ]
     },
+    externals: ["react"],
     plugins: [
         new CleanWebpackPlugin({
             dry: false,
@@ -50,15 +52,12 @@ export default <webpack.Configuration>{
         new webpack.ProvidePlugin({
             "React": "react"
         }),
-        // bundle definitions when done plugin
-        {
-            apply: compiler => compiler.hooks.done.tap("D.TS", () => require("dts-bundle").bundle({
-                name: packageName,
-                main: join(outDir, "index.d.ts"),
-                out: join(outDir, "index.d.ts"),
-                removeSource: true,
-                outputAsModuleFolder: true
-            }))
-        }
+        new CombineDefinitionsWebpackPlugin({
+            name: packageName,
+            main: join(outDir, "index.d.ts"),
+            out: join(outDir, "index.d.ts"),
+            removeSource: true,
+            outputAsModuleFolder: true
+        })
     ]
 };

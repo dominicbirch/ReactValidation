@@ -1,6 +1,6 @@
 import { SubjectProps } from "./_form"
 import { useContext } from "react"
-import ValidationContext from "./_context"
+import { ValidationContext } from "./_context"
 
 export function useValidation<T = any>(): SubjectProps<T, keyof T> {
     const context = useContext(ValidationContext);
