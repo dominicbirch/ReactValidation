@@ -1,6 +1,10 @@
-import * as webpack from "webpack"
-import { resolve } from "path"
+import * as webpack from "webpack";
+import { resolve, join } from "path";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+
+const
+    { name: packageName } = require("./package.json"),
+    outDir = resolve("./lib") ;
 
 export default <webpack.Configuration>{
     target: "node",
@@ -8,14 +12,16 @@ export default <webpack.Configuration>{
     entry: "./src/index.ts",
     output: {
         filename: "index.js",
-        path: resolve("./lib"),
-        publicPath: "/"
+        path: outDir,
+        publicPath: "/",
+        library: packageName,
+        libraryTarget: "umd", 
+        umdNamedDefine: true
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
-        modules: ["node_modules", "./src"]
+        modules: ["node_modules"]
     },
-    //externals: ["react"],
     module: {
         rules: [
             {
@@ -43,6 +49,16 @@ export default <webpack.Configuration>{
         }),
         new webpack.ProvidePlugin({
             "React": "react"
-        })
+        }),
+        // bundle definitions when done plugin
+        {
+            apply: compiler => compiler.hooks.done.tap("D.TS", () => require("dts-bundle").bundle({
+                name: packageName,
+                main: join(outDir, "index.d.ts"),
+                out: join(outDir, "index.d.ts"),
+                removeSource: true,
+                outputAsModuleFolder: true
+            }))
+        }
     ]
 };

@@ -1,5 +1,6 @@
 {
   "name": "@dominicbirch/react-validation",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "./lib//index.js",
@@ -28,13 +29,14 @@
     "@types/react": "^16.9.46",
     "@types/webpack": "^4.41.21",
     "clean-webpack-plugin": "^3.0.0",
+    "dts-bundle": "^0.7.3",
     "ts-loader": "^8.0.2",
     "ts-node": "^8.10.2",
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
-  "peerDependencies": {
+  "dependencies": {
     "react": "^16.13.1"
   }
 }

@@ -1,4 +1,4 @@
-import { ArrayResult, ArrayValidator } from "_arrayValidator";
+import { ArrayResult, ArrayValidator } from "./_arrayValidator";
 
 export type ElementType<T> = T extends (infer U)[] ? U : never;
 
