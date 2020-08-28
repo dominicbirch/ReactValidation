@@ -26,11 +26,10 @@
     "url": "https://github.com/dominicbirch/ReactValidation.git"
   },
   "devDependencies": {
-    "@types/dts-bundle": "0.0.31",
     "@types/react": "^16.9.46",
     "@types/webpack": "^4.41.21",
+    "bundle-declarations-webpack-plugin": "0.0.2",
     "clean-webpack-plugin": "^3.0.0",
-    "dts-bundle": "^0.7.3",
     "ts-loader": "^8.0.2",
     "ts-node": "^8.10.2",
     "typescript": "^4.0.2",

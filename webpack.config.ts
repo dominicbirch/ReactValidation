@@ -1,8 +1,7 @@
 import * as webpack from "webpack";
 import { resolve, join } from "path";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import CombineDefinitionsWebpackPlugin from "./combineDefinitionsWebpackPlugin";
-
+import { CombineDeclarationsWebpackPlugin } from "bundle-declarations-webpack-plugin";
 const
     { name: packageName } = require("./package.json"),
     outDir = resolve("./lib");
@@ -52,7 +51,7 @@ export default <webpack.Configuration>{
         new webpack.ProvidePlugin({
             "React": "react"
         }),
-        new CombineDefinitionsWebpackPlugin({
+        new CombineDeclarationsWebpackPlugin({
             name: packageName,
             main: join(outDir, "index.d.ts"),
             out: join(outDir, "index.d.ts"),
