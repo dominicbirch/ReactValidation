@@ -2,16 +2,24 @@
   "name": "@dominicbirch/react-validation",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "module": "dist/",
-  "types": "lib/index.d.ts",
+  "main": "./lib//index.js",
+  "module": "./lib/",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dominic Birch <dominicbirch@outlook.com> https://github.com/dominicbirch",
   "homepage": "https://github.com/dominicbirch/ReactValidation",
   "license": "ISC",
-  "keywords": ["react", "validation", "validate", "validator", "typescript", "tsx", "jsx"],
+  "keywords": [
+    "react",
+    "validation",
+    "validate",
+    "validator",
+    "typescript",
+    "tsx",
+    "jsx"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/dominicbirch/ReactValidation.git"
@@ -26,7 +34,7 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^16.13.1"
   }
 }

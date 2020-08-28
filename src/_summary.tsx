@@ -1,4 +1,4 @@
-import React = require("react");
+import * as React from "react";
 import { AnyResult } from "./_common";
 import { anyFailures, isArrayResult } from "./_utils";
 

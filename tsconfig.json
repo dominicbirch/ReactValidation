@@ -19,6 +19,7 @@
         "strict": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "module": "esNext"
     }
 }

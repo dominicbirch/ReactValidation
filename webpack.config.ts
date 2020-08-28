@@ -8,14 +8,14 @@ export default <webpack.Configuration>{
     entry: "./src/index.ts",
     output: {
         filename: "index.js",
-        path: resolve("./dist"),
+        path: resolve("./lib"),
         publicPath: "/"
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
-        modules: ["node_modules"]
+        modules: ["node_modules", "./src"]
     },
-    externals: ["react"],
+    //externals: ["react"],
     module: {
         rules: [
             {
@@ -39,7 +39,10 @@ export default <webpack.Configuration>{
             cleanOnceBeforeBuildPatterns: [
                 resolve("./lib/**/*.*"),
                 resolve("./dist/**/*.*")
-            ],
+            ]
+        }),
+        new webpack.ProvidePlugin({
+            "React": "react"
         })
     ]
 };
