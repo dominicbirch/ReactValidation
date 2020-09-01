@@ -1,6 +1,39 @@
 # Examples
+
 ## ValidationForm
+
 ### Example 1
+
+```tsx
+import { composeHandler, requireLengthBetween, requirePattern, requireValue, ValidationForm, ValidationSummary } from '@dominicbirch/react-validation';
+import React from 'react';
+import './App.scss';
+
+
+export default function App() {
+  const [value, setValue] = React.useState("");
+
+  return <ValidationForm
+    values={{
+      test: value
+    }}
+    rules={{
+      test: composeHandler(requireValue(), requireLengthBetween(4, 64), requirePattern(/^\w+$/i, `The test field should contain only letters and numbers, but received '${value}'`))
+    }}
+    action={x => console.log(x)}
+    render={({ submit, values: { test }, results }) =>
+      <>
+        <ValidationSummary value={results} />
+        <input value={test || ""} onChange={({ currentTarget: { value: v } }: React.ChangeEvent<HTMLInputElement>) => setValue(v)} />
+        <button type="button" onClick={submit}>Test</button>
+      </>
+    } />;
+}
+
+```
+
+### Example 2
+
 ```tsx
 <ValidationForm
     values={{
@@ -29,7 +62,7 @@
         address: ValidateAddress
     }}
     action={valid => alert(valid)}
-    component={({ submit, validate, values: { name, age }, results }) =>
+    render={({ submit, validate, values: { name, age }, results }) =>
         <>
             <ValidationSummary value={results} />
             <input value={name} type="text">
@@ -39,7 +72,9 @@
         </>}
     />
 ```
-### Example 2
+
+### Example 3
+
 ```tsx
 export default () =>
     <ValidationForm
@@ -76,14 +111,15 @@ export default () =>
                 2: requireValue()
             }
         }}
-        component={({ submit, results }) =>
+        render={({ submit, results }) =>
             <form onSubmit={submit} method="none">
                 <ValidationSummary value={results} />
                 <button type="submit">Test</button>
             </form>} />;
 ```
 
-## ValidationHandlers<T>
+## ValidationHandlers
+
 ```typescript
 interface Address {
     line1: string;
