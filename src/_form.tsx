@@ -1,21 +1,22 @@
-import { ComponentType, createElement, useCallback, useMemo, useState } from "react";
+import React, { createElement, PropsWithChildren, useCallback, useMemo, useState } from "react";
 import { AnyResult, HigherOrderComponent, ValidationResult, ValidationRules } from "./_common";
 import { ValidationContext } from "./_context";
 import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
 export interface SubjectProps<T = any, K extends keyof T = any> {
     results: ValidationResult<T>;
-    //values: T;
+    values: T;
     submit: () => void;
     validate: (key?: K) => boolean;
 }
 
-export interface ValidationFormProps<T, K extends keyof T> {
+export interface ValidationFormProps<T> {
     values: T;
     rules?: ValidationRules<T>;
     action?: (valid: boolean) => void;
-    provideContext?: boolean;
-    component: ComponentType<SubjectProps<T, K>>;
+    // provideContext?: boolean;
+    //component: ComponentType<SubjectProps<T, K>>;
+    //children: (props: SubjectProps<T, K>) => ReactElement | ReactPortal;
 }
 
 function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, values: T): AnyResult<T[K]> {
@@ -39,7 +40,7 @@ function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, va
 }
 
 
-export function ValidationForm<T, K extends keyof T>({ values, rules, action, provideContext, component: Subject }: ValidationFormProps<T, K>) {
+export function ValidationForm<T, K extends keyof T>({ values, rules, action, children }: PropsWithChildren<ValidationFormProps<T>>) {
     const
         [results, setResults] = useState({} as ValidationResult<T>),
         validate = useCallback((key?: K): boolean => {
@@ -67,16 +68,14 @@ export function ValidationForm<T, K extends keyof T>({ values, rules, action, pr
         }, [action, validate]),
 
         childProps = useMemo(() => ({
-//            values,
+            values,
             results,
             submit,
             validate
         }), [values, results, submit, validate]);
 
 
-    return provideContext
-        ? createElement(ValidationContext.Provider, { value: childProps }, createElement(Subject, childProps))
-        : createElement(Subject, childProps);
+    return <ValidationContext.Provider value={childProps}>{children}</ValidationContext.Provider>;
 };
 
 
