@@ -1,15 +1,18 @@
 import React, { CSSProperties, useMemo } from "react";
-import { useValidation } from "./_hooks";
 import { AnyResult } from "./_common";
 import { anyFailures, isArrayResult } from "./_utils";
 
 
-export interface ValidationSummaryProps {
+export interface ValidationSummaryProps<T = any> {
+    value?: AnyResult<T>;
     className?: string;
     style?: CSSProperties;
 }
 
-function renderSummary<T = any>(value: AnyResult<T>, listProps?: any) {
+export function ValidationSummary<T = any>({ value, className, style }: ValidationSummaryProps<T>) {
+    const
+        listProps = useMemo(() => ({ style, className: `validation-summary${className ? ` ${className}` : ""}` }), [className, style]);
+
     if (anyFailures(value)) {
         if (Array.isArray(value)) {
             return (
@@ -28,12 +31,12 @@ function renderSummary<T = any>(value: AnyResult<T>, listProps?: any) {
                     {
                         value.each &&
                         Object.keys(value.each).map((k, i) => {
-                            const r = (value.each && value.each[k]) || null;
+                            const r = value.each && value.each[k];
                             return anyFailures(r)
                                 ?
                                 <li key={i}>
                                     {k}
-                                    {renderSummary(r)}
+                                    <ValidationSummary value={r} />
                                 </li>
                                 : null;
                         })
@@ -47,13 +50,15 @@ function renderSummary<T = any>(value: AnyResult<T>, listProps?: any) {
                     {
                         value &&
                         Object.keys(value).map((k, i) => {
-                            const r = (value[k as keyof typeof value]);
+                            const r = value[k as keyof typeof value];
 
-                            return anyFailures(r) &&
+                            return anyFailures(r)
+                                ?
                                 <li key={i}>
                                     {k}
-                                    {renderSummary(r as T[keyof T])}
-                                </li>;
+                                    <ValidationSummary value={r} />
+                                </li>
+                                : null;
                         })
                     }
                 </ul>
@@ -62,13 +67,4 @@ function renderSummary<T = any>(value: AnyResult<T>, listProps?: any) {
     }
 
     return <></>;
-}
-
-
-export function ValidationSummary<T = any>({ className, style }: ValidationSummaryProps) {
-    const
-        listProps = useMemo(() => ({ style, className: `validation-summary${className ? ` ${className}` : ""}` }), [className, style]),
-        { results } = useValidation<T>();
-
-    return renderSummary(results, listProps);
 }

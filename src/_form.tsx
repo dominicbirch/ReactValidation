@@ -1,5 +1,5 @@
-import React, { createElement, PropsWithChildren, useCallback, useMemo, useState } from "react";
-import { AnyResult, HigherOrderComponent, ValidationResult, ValidationRules } from "./_common";
+import React, { ReactElement, ReactPortal, useCallback, useMemo, useState } from "react";
+import { AnyResult, ValidationResult, ValidationRules } from "./_common";
 import { ValidationContext } from "./_context";
 import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
@@ -13,10 +13,9 @@ export interface SubjectProps<T = any, K extends keyof T = any> {
 export interface ValidationFormProps<T> {
     values: T;
     rules?: ValidationRules<T>;
+    provideContext?: boolean;
     action?: (valid: boolean) => void;
-    // provideContext?: boolean;
-    //component: ComponentType<SubjectProps<T, K>>;
-    //children: (props: SubjectProps<T, K>) => ReactElement | ReactPortal;
+    children: (props: SubjectProps<T>) => ReactElement | ReactPortal;
 }
 
 function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, values: T): AnyResult<T[K]> {
@@ -40,7 +39,7 @@ function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, va
 }
 
 
-export function ValidationForm<T, K extends keyof T>({ values, rules, action, children }: PropsWithChildren<ValidationFormProps<T>>) {
+export function ValidationForm<T, K extends keyof T>({ values, rules, provideContext, action, children }: ValidationFormProps<T>) {
     const
         [results, setResults] = useState({} as ValidationResult<T>),
         validate = useCallback((key?: K): boolean => {
@@ -75,12 +74,9 @@ export function ValidationForm<T, K extends keyof T>({ values, rules, action, ch
         }), [values, results, submit, validate]);
 
 
-    return <ValidationContext.Provider value={childProps}>{children}</ValidationContext.Provider>;
+    return provideContext
+        ? <ValidationContext.Provider value={childProps}>
+            {children(childProps)}
+        </ValidationContext.Provider>
+        : children(childProps);
 };
-
-
-export function withValidateProps<T>(rules: ValidationRules<T>): HigherOrderComponent<T, T & { results?: ValidationResult<T>; validate: (key?: string) => boolean; }> {
-    //TODO:
-    return Component => (props => createElement(Component, props));
-}
-
