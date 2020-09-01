@@ -72,7 +72,7 @@ function hasValue<T>(v: T): boolean {
         return false;
     }
 
-    if (typeof v === "string" && /^\w*$/i.test(v)) {
+    if (typeof v === "string" && /^\s*$/i.test(v)) {
         return false;
     }
 

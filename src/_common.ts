@@ -1,3 +1,4 @@
+import { ComponentType } from "react";
 import { ArrayResult, ArrayValidator } from "./_arrayValidator";
 
 export type ElementType<T> = T extends (infer U)[] ? U : never;
@@ -19,3 +20,5 @@ export type Predicate<T> = (value: T) => boolean;
 export interface Builder<T> {
     build(): T;
 }
+
+export type HigherOrderComponent<T = any, O extends T = T> = (component: ComponentType<T>) => ComponentType<O>;

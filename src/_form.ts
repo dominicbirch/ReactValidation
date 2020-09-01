@@ -1,11 +1,11 @@
-import { createElement, useCallback, useMemo, useState } from "react";
-import { AnyResult, ValidationResult, ValidationRules } from "./_common";
+import { ComponentType, createElement, useCallback, useMemo, useState } from "react";
+import { AnyResult, HigherOrderComponent, ValidationResult, ValidationRules } from "./_common";
 import { ValidationContext } from "./_context";
 import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
 export interface SubjectProps<T = any, K extends keyof T = any> {
     results: ValidationResult<T>;
-    values: T;
+    //values: T;
     submit: () => void;
     validate: (key?: K) => boolean;
 }
@@ -15,7 +15,7 @@ export interface ValidationFormProps<T, K extends keyof T> {
     rules?: ValidationRules<T>;
     action?: (valid: boolean) => void;
     provideContext?: boolean;
-    component: React.ComponentType<SubjectProps<T, K>>;
+    component: ComponentType<SubjectProps<T, K>>;
 }
 
 function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, values: T): AnyResult<T[K]> {
@@ -67,7 +67,7 @@ export function ValidationForm<T, K extends keyof T>({ values, rules, action, pr
         }, [action, validate]),
 
         childProps = useMemo(() => ({
-            values,
+//            values,
             results,
             submit,
             validate
@@ -78,3 +78,10 @@ export function ValidationForm<T, K extends keyof T>({ values, rules, action, pr
         ? createElement(ValidationContext.Provider, { value: childProps }, createElement(Subject, childProps))
         : createElement(Subject, childProps);
 };
+
+
+export function withValidateProps<T>(rules: ValidationRules<T>): HigherOrderComponent<T, T & { results?: ValidationResult<T>; validate: (key?: string) => boolean; }> {
+    //TODO:
+    return Component => (props => createElement(Component, props));
+}
+
