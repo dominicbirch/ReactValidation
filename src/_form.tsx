@@ -15,7 +15,7 @@ export interface ValidationFormProps<T> {
     rules?: ValidationRules<T>;
     provideContext?: boolean;
     action?: (valid: boolean) => void;
-    children: (props: SubjectProps<T>) => ReactElement | ReactPortal;
+    render: (props: SubjectProps<T>) => ReactElement | ReactPortal;
 }
 
 function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, values: T): AnyResult<T[K]> {
@@ -39,7 +39,7 @@ function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, va
 }
 
 
-export function ValidationForm<T, K extends keyof T>({ values, rules, provideContext, action, children }: ValidationFormProps<T>) {
+export function ValidationForm<T, K extends keyof T>({ values, rules, provideContext, action, render }: ValidationFormProps<T>) {
     const
         [results, setResults] = useState({} as ValidationResult<T>),
         validate = useCallback((key?: K): boolean => {
@@ -76,7 +76,7 @@ export function ValidationForm<T, K extends keyof T>({ values, rules, provideCon
 
     return provideContext
         ? <ValidationContext.Provider value={childProps}>
-            {children(childProps)}
+            {render(childProps)}
         </ValidationContext.Provider>
-        : children(childProps);
+        : render(childProps);
 };

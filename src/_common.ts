@@ -3,6 +3,8 @@ import { ArrayResult, ArrayValidator } from "./_arrayValidator";
 
 export type ElementType<T> = T extends (infer U)[] ? U : never;
 
+export type ChangeHandler<T = any> = (key: keyof T, value: T[typeof key]) => void;
+
 export type ValidationResult<T = any> = {
     [P in keyof T]?: AnyResult<T[P]>;
 };

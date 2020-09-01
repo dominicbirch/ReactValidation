@@ -9,6 +9,7 @@ export interface ValidationSummaryProps<T = any> {
     style?: CSSProperties;
 }
 
+
 export function ValidationSummary<T = any>({ value, className, style }: ValidationSummaryProps<T>) {
     const
         listProps = useMemo(() => ({ style, className: `validation-summary${className ? ` ${className}` : ""}` }), [className, style]);
