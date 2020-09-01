@@ -45,7 +45,7 @@ export function ValidationForm<T, K extends keyof T>({ values, rules, action, pr
         validate = useCallback((key?: K): boolean => {
             if (rules) {
                 if (key) {
-                    let r = validateKey(key, rules, values);
+                    const r = validateKey(key, rules, values);
                     setResults({ ...results, [key]: r });
 
                     return !anyFailures(r);

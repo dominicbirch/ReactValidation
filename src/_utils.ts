@@ -45,11 +45,17 @@ export function anyFailures<T>(results?: AnyResult<T>): boolean {
     return false;
 }
 
-export function applyValildationRules<T>(rules: ValidationRules<T>, value: T): ValidationResult<T> {
+export function applyValildationRules<T>(rules: ValidationRules<T>, values: T): ValidationResult<T> {
     return Object.keys(rules).reduce((r, k, i) => {
-        const key = k as keyof typeof rules;
-        if (rules[key]) {
-
+        const key = k as keyof typeof rules, rule = rules[key], value = values[key];
+        if (rule) {
+            if (typeof rule === "function") {
+                r[key] = rule(value);
+            } else if (isArrayValidator(rule) && Array.isArray(value)) {
+                r[key] = rule.validate(value);
+            } else if (isValidationRules(rule)) {
+                r[key] = applyValildationRules(rule, value);
+            }
         }
 
         return r;
