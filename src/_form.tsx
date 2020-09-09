@@ -1,17 +1,19 @@
 import React, { ReactElement, ReactPortal, useCallback, useMemo, useState } from "react";
-import { AnyResult, ValidationResult, ValidationRules } from "./_common";
+import { AnyResult, ChangeHandler, ChangeHandlers, ValidationResult, ValidationRules } from "./_common";
 import { ValidationContext } from "./_context";
 import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
 export interface SubjectProps<T = any, K extends keyof T = any> {
     results: ValidationResult<T>;
     values: T;
+    changeHandlers?: ChangeHandlers<T>;
     submit: () => void;
     validate: (key?: K) => boolean;
 }
 
 export interface ValidationFormProps<T> {
     values: T;
+    onChange?: ChangeHandler<T>
     rules?: ValidationRules<T>;
     provideContext?: boolean;
     action?: (valid: boolean) => void;
@@ -39,7 +41,7 @@ function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, va
 }
 
 
-export function ValidationForm<T, K extends keyof T>({ values, rules, provideContext, action, render }: ValidationFormProps<T>) {
+export function ValidationForm<T, K extends keyof T>({ values, rules, provideContext, action, render, onChange }: ValidationFormProps<T>) {
     const
         [results, setResults] = useState({} as ValidationResult<T>),
         validate = useCallback((key?: K): boolean => {
@@ -65,12 +67,22 @@ export function ValidationForm<T, K extends keyof T>({ values, rules, provideCon
                 action(valid);
             }
         }, [action, validate]),
+        changeHandlers = useMemo(() => {
+            if (onChange) {
+                return Object.keys(values).reduce((r, k, i) => {
+                    r[k as keyof T] = v => onChange(k as keyof T, v);
+
+                    return r;
+                }, {} as ChangeHandlers<T>);
+            }
+        }, [onChange, values]),
 
         childProps = useMemo(() => ({
             values,
             results,
             submit,
-            validate
+            validate,
+            changeHandlers
         }), [values, results, submit, validate]);
 
 

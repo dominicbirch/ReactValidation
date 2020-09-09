@@ -1,9 +1,13 @@
 import { ComponentType } from "react";
 import { ArrayResult, ArrayValidator } from "./_arrayValidator";
 
+/**The type of each element in the array type */
 export type ElementType<T> = T extends (infer U)[] ? U : never;
 
 export type ChangeHandler<T = any> = (key: keyof T, value: T[typeof key]) => void;
+export type ChangeHandlers<T = any> = {
+    [P in keyof T]: (value: T[P]) => void;
+};
 
 export type ValidationResult<T = any> = {
     [P in keyof T]?: AnyResult<T[P]>;
