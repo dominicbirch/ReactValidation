@@ -7,7 +7,8 @@
   "module": "./lib/",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "prepack": "webpack"
   },
   "author": "Dominic Birch <dominicbirch@outlook.com> https://github.com/dominicbirch",
   "homepage": "https://github.com/dominicbirch/ReactValidation",
@@ -25,18 +26,25 @@
     "type": "git",
     "url": "https://github.com/dominicbirch/ReactValidation.git"
   },
+  "engines": {
+    "npm": ">= 6.14.8",
+    "node": ">= 12.6.0"
+  },
   "devDependencies": {
+    "@types/jest": "^26.0.13",
     "@types/react": "^16.9.46",
     "@types/webpack": "^4.41.21",
     "bundle-declarations-webpack-plugin": "0.0.2",
     "clean-webpack-plugin": "^3.0.0",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.3.0",
     "ts-loader": "^8.0.2",
     "ts-node": "^8.10.2",
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^16.13.1"
   }
 }

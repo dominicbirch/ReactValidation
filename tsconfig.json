@@ -25,7 +25,6 @@
         "skipLibCheck": true,
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
-        "isolatedModules": true,
 
         // "target": "ESNext",
         // "module": "ESNext"
