@@ -1,7 +1,7 @@
-import { HandlerBuilder } from "./_handlerBuilder";
+import { DefaultValidatorBuilder } from "./_defaultValidatorBuilder";
 
 
-export class DateValidatorBuilder extends HandlerBuilder<Date>{
+export class DateValidatorBuilder extends DefaultValidatorBuilder<Date>{
     past(message = "Must be in the past"): this {
         return this.add(d => d.getTime() >= Date.now() ? [message] : null);
     }

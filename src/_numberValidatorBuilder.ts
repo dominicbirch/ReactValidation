@@ -1,8 +1,8 @@
-import { HandlerBuilder } from "./_handlerBuilder";
+import { DefaultValidatorBuilder } from "./_defaultValidatorBuilder";
 import { requireBetween, requireMaximum, requireMinimum } from "./_utils";
 
 /**Builder used to create validation handlers for numeric values. */
-export class NumberValidatorBuilder extends HandlerBuilder<number> {
+export class NumberValidatorBuilder extends DefaultValidatorBuilder<number> {
     /**Require that the number has a value greater than or equal to the value provided.
      * @param min The lowest acceptable value.
      * @param message An optional message describing the failure.

@@ -1,10 +1,10 @@
 import { ArrayValidatorBuilder } from "./_arrayValidatorBuilder";
 import { DateValidatorBuilder } from "./_dateValidatorBuilder";
-import { HandlerBuilder } from "./_handlerBuilder";
+import { DefaultValidatorBuilder } from "./_defaultValidatorBuilder";
 import { NumberValidatorBuilder } from "./_numberValidatorBuilder";
 import { StringValidatorBuilder } from "./_stringValidatorBuilder";
 
-export class ValidatorFactory {
+export default class ValidatorFactory {
     static get String() {
         return new StringValidatorBuilder();
     }
@@ -22,6 +22,6 @@ export class ValidatorFactory {
     }
 
     static Default<T>() {
-        return new HandlerBuilder<T>();
+        return new DefaultValidatorBuilder<T>();
     }
 }

@@ -1,8 +1,8 @@
-import { HandlerBuilder } from "./_handlerBuilder";
+import { DefaultValidatorBuilder } from "./_defaultValidatorBuilder";
 import { requireLengthBetween, requireMaximumLength, requireMinimumLength, requirePattern } from "./_utils";
 
 /**Builder used to create validation handlers for string values */
-export class StringValidatorBuilder extends HandlerBuilder<string> {
+export class StringValidatorBuilder extends DefaultValidatorBuilder<string> {
     /**Require that the value has a length of at least `length`.
      * @param length The shortest acceptable length.
      * @param message An optional message describing the failure.

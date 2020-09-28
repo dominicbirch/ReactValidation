@@ -1,7 +1,7 @@
 import type { Builder, Predicate, ValidationHandler } from "./_common";
 import { requirePredicate, requireValue } from "./_utils";
 
-export class HandlerBuilder<T> implements Builder<ValidationHandler<T>>{
+export class DefaultValidatorBuilder<T> implements Builder<ValidationHandler<T>>{
     private _handlers: ValidationHandler<T>[] = [];
 
     build(): ValidationHandler<T> {
