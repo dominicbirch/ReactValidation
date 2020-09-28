@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactPortal, useCallback, useMemo, useState } from "react";
-import { AnyResult, ChangeHandler, ChangeHandlers, ValidationResult, ValidationRules } from "./_common";
+import type { AnyResult, ChangeHandler, ChangeHandlers, ValidationResult, ValidationRules } from "./_common";
 import { ValidationContext } from "./_context";
 import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 

@@ -1,8 +1,8 @@
-import { Builder, ValidationHandler, Validator } from "./_common";
+import type { Builder, ValidationHandler, Validator } from "./_common";
 import { ArrayValidator, ElementKeyFactory } from "./_arrayValidator";
 import { composeHandler } from "./_utils";
 
-export default class ArrayValidatorBuilder<T = any> implements Builder<ArrayValidator<T>>{
+export class ArrayValidatorBuilder<T = any> implements Builder<ArrayValidator<T>>{
     private _all;
     private _each;
     private _formatKey;

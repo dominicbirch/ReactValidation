@@ -24,6 +24,7 @@ export type AnyResult<T> = null | string[] | ArrayResult<ElementType<T>> | Valid
 export type Predicate<T> = (value: T) => boolean;
 
 export interface Builder<T> {
+    /**Build and return a new instance. */
     build(): T;
 }
 

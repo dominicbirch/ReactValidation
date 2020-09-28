@@ -1,5 +1,5 @@
 import { ArrayResult, ArrayValidator } from "./_arrayValidator";
-import { AnyResult, AnyValidator, ElementType, Predicate, ValidationHandler, ValidationResult, ValidationRules } from "./_common";
+import type { AnyResult, AnyValidator, ElementType, Predicate, ValidationHandler, ValidationResult, ValidationRules } from "./_common";
 
 
 export function isValidationRules<T>(subject?: AnyValidator<T>): subject is ValidationRules<T> {

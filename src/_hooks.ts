@@ -1,4 +1,4 @@
-import { SubjectProps } from "./_form"
+import type { SubjectProps } from "./_form"
 import { useContext } from "react"
 import { ValidationContext } from "./_context"
 

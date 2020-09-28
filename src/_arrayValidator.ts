@@ -1,4 +1,4 @@
-import { AnyResult, ValidationHandler, Validator, ValidationResult } from "./_common";
+import type { AnyResult, ValidationHandler, Validator, ValidationResult } from "./_common";
 import { applyValildationRules, isArrayValidator, isValidationRules, anyFailures } from "./_utils";
 
 export type ResultsDictionary<T = any> = { [key: string]: ValidationResult<T>; };
@@ -29,6 +29,9 @@ function applyRule<T>(validator: Validator<T>, value: T): AnyResult<T> {
     return null;
 }
 
+/**Generic array validator
+ * @typeparam T The type of each element in arrays to be validated
+ */
 export class ArrayValidator<T = any>{
     constructor(readonly all: ValidationHandler<T[]> = () => null, readonly each: Validator<T> = () => null, readonly formatKey: ElementKeyFactory<T> = i => String(i)) {
     }
