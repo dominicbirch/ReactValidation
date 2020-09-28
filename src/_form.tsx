@@ -3,7 +3,7 @@ import type { AnyResult, ChangeHandler, ChangeHandlers, ValidationResult, Valida
 import { ValidationContext } from "./_context";
 import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
-/**Abstraction of the properties which may be bound to children of {@linkcode ValidationForm}.  */
+/**Abstraction of the properties which may be bound to children of {@link ValidationForm}.  */
 export interface SubjectProps<T = any, K extends keyof T = any> {
     /**The most recent results from validating `values` */
     results: ValidationResult<T>;
@@ -23,15 +23,15 @@ export interface ValidationFormProps<T> {
     /**The current values to be validated. */
     values: T;
     /**Optional change handler receiving the key and new value.
-     * This is automatically connected to {@linkcode SubjectProps.changeHandlers}
+     * This is automatically connected to {@link SubjectProps.changeHandlers}
      */
     onChange?: ChangeHandler<T>;
-    /**The validation rules to be applied to {@linkcode ValidationFormProps.values} */
+    /**The validation rules to be applied to {@link ValidationFormProps.values} */
     rules?: ValidationRules<T>;
-    /**If `true` {@linkcode SubjectProps} will be provided to children of the form via the react context api. */
+    /**If `true` {@link SubjectProps} will be provided to children of the form via the react context api. */
     provideContext?: boolean;
     /**The action to be taken when the user attempts to submit the form.
-     * @param valid `true` if the current state of {@linkcode values} was valid, otherwise `false`.
+     * @param valid `true` if the current state of {@link values} was valid, otherwise `false`.
      */
     action?: (valid: boolean) => void;
     /**The function component to be rendered as the forms children. */
