@@ -4,7 +4,7 @@ import { DefaultValidatorBuilder } from "./_defaultValidatorBuilder";
 import { NumberValidatorBuilder } from "./_numberValidatorBuilder";
 import { StringValidatorBuilder } from "./_stringValidatorBuilder";
 
-export default class ValidatorFactory {
+export class ValidatorFactory {
     static get String() {
         return new StringValidatorBuilder();
     }

@@ -1,11 +1,11 @@
 import type { Builder, Predicate, ValidationHandler } from "./_common";
-import { requirePredicate, requireValue } from "./_utils";
+import { composeHandler, requirePredicate, requireValue } from "./_utils";
 
 export class DefaultValidatorBuilder<T> implements Builder<ValidationHandler<T>>{
     private _handlers: ValidationHandler<T>[] = [];
 
     build(): ValidationHandler<T> {
-        throw new Error("Method not implemented.");
+        return composeHandler(...this._handlers);
     }
 
     /**Add the handler provided to the handler being built.
