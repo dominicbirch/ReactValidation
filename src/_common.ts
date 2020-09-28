@@ -28,4 +28,5 @@ export interface Builder<T> {
     build(): T;
 }
 
+/**Abstraction of a function which takes a component type and returns a new component type for which the props extends those of the original type. */
 export type HigherOrderComponent<T = any, O extends T = T> = (component: ComponentType<T>) => ComponentType<O>;

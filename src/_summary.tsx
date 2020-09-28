@@ -4,8 +4,11 @@ import { anyFailures, isArrayResult } from "./_utils";
 
 
 export interface ValidationSummaryProps<T = any> {
+    /**The result(s) to be summarized.*/
     value?: AnyResult<T>;
+    /**Override the CSS classes applied to the root.*/
     className?: string;
+    /**Override the inline styles applied to the root.*/
     style?: CSSProperties;
 }
 

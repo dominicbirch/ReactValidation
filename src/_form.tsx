@@ -3,20 +3,38 @@ import type { AnyResult, ChangeHandler, ChangeHandlers, ValidationResult, Valida
 import { ValidationContext } from "./_context";
 import { anyFailures, applyValildationRules, isArrayValidator, isValidationRules } from "./_utils";
 
+/**Abstraction of the properties which may be bound to children of {@linkcode ValidationForm}.  */
 export interface SubjectProps<T = any, K extends keyof T = any> {
+    /**The most recent results from validating `values` */
     results: ValidationResult<T>;
+    /**The values as they are to be validated */
     values: T;
+    /**Optional value change handlers which are automatically connected to `onChange` of the nearest parent validation form or context value. */
     changeHandlers?: ChangeHandlers<T>;
+    /**Validate and invoke the action of the nearest parent form or context. */
     submit: () => void;
+    /**Validate the specified key and return an indication of the outcome.
+     * `true` if the value for the key was valid.
+     */
     validate: (key?: K) => boolean;
 }
 
 export interface ValidationFormProps<T> {
+    /**The current values to be validated. */
     values: T;
-    onChange?: ChangeHandler<T>
+    /**Optional change handler receiving the key and new value.
+     * This is automatically connected to {@linkcode SubjectProps.changeHandlers}
+     */
+    onChange?: ChangeHandler<T>;
+    /**The validation rules to be applied to {@linkcode ValidationFormProps.values} */
     rules?: ValidationRules<T>;
+    /**If `true` {@linkcode SubjectProps} will be provided to children of the form via the react context api. */
     provideContext?: boolean;
+    /**The action to be taken when the user attempts to submit the form.
+     * @param valid `true` if the current state of {@linkcode values} was valid, otherwise `false`.
+     */
     action?: (valid: boolean) => void;
+    /**The function component to be rendered as the forms children. */
     render: (props: SubjectProps<T>) => ReactElement | ReactPortal;
 }
 
@@ -41,6 +59,7 @@ function validateKey<T, K extends keyof T>(key: K, rules: ValidationRules<T>, va
 }
 
 
+/**Represents the root of a component tree in the context of validation */
 export function ValidationForm<T, K extends keyof T>({ values, rules, provideContext, action, render, onChange }: ValidationFormProps<T>) {
     const
         [results, setResults] = useState({} as ValidationResult<T>),
