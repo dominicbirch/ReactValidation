@@ -73,12 +73,13 @@ export default function App() {
     />
 ```
 
-### Example 3
+### Example 3 (With builders & factory)
 
 ```tsx
 export default () =>
     <ValidationForm
         values={{
+            someString: "Test",
             testArray1: ["One", "Two", "Three"],
             testArray2: [{ test: 1 }, { test: 2 }, { test: 3 }],
             testArray3: [[1, "One"], [2, "Two"], [3, "Three"]],
@@ -88,21 +89,29 @@ export default () =>
             }
         }}
         rules={{
-            testArray1: new ArrayValidatorBuilder<string>()
+            someString: ValidatorFactory.String()
+                .require()
+                .minLength(3)
+                .build(),
+            testArray1: ValidatorFactory.Array<string>()
                 .withLabelFormat((i, v) => v)
                 .withRules(requireMinimumLength(2))
-                .withRulesForEach(requireValue(), requireMinimumLength(3))
+                .withRulesForEach(ValidatorFactory.Array<string>()
+                    .require()
+                    .minLength(3)
+                    .build()
+                )
                 .build(),
-            testArray2: new ArrayValidatorBuilder<{ test?: number }>()
+            testArray2: ValidatorFactory.Array<{ test?: number }>()
                 .withLabelFormat((i, v) => `Item ${i + 1}: Test ${v.test}`)
                 .withRules(requireValue(), requireMinimumLength(1))
                 .withRuleForEach({
                     test: requireValue()
                 })
                 .build(),
-            testArray3: new ArrayValidatorBuilder<React.ReactText[]>()
+            testArray3: ValidatorFactory.Array<React.ReactText[]>()
                 .withRules(requireValue())
-                .withRuleForEach(new ArrayValidatorBuilder<React.ReactText>()
+                .withRuleForEach(ValidatorFactory.Array<React.ReactText>()
                     .withRules(x => x.length !== 2 ? ["There should be exactly 2 items"] : null)
                     .build())
                 .build(),
