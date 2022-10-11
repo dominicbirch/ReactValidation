@@ -34,7 +34,7 @@
     "@types/jest": "^26.0.13",
     "@types/react": "^16.9.46",
     "@types/webpack": "^4.41.21",
-    "bundle-declarations-webpack-plugin": "0.0.2",
+    "bundle-declarations-webpack-plugin": "3.1.1",
     "clean-webpack-plugin": "^3.0.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.3.0",
